@@ -47,15 +47,25 @@ export const createTask = async (req, res) => {
     }
 };
 
-// UPDATE a task
+// UPDATE a task (FIXED — now supports partial updates)
 export const updateTask = async (req, res) => {
     const { id } = req.params;
     const { title, completed } = req.body;
 
     try {
+        const data = {};
+
+        if (typeof title !== "undefined") {
+            data.title = title;
+        }
+
+        if (typeof completed !== "undefined") {
+            data.completed = completed;
+        }
+
         const updatedTask = await prisma.task.update({
             where: { id: Number(id) },
-            data: { title, completed }
+            data
         });
 
         res.json(updatedTask);

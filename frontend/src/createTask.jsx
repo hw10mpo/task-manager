@@ -6,15 +6,14 @@ export default function CreateTask({ onTaskCreated }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const res = await fetch("http://localhost:5000/api/tasks", {
+        await fetch("http://localhost:5000/api/tasks", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ title })
         });
 
-        const newTask = await res.json();
-        onTaskCreated(newTask);
         setTitle("");
+        onTaskCreated();
     };
 
     return (
