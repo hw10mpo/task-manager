@@ -1,13 +1,20 @@
 <!doctype html>
+<!-- Language for the Website -->
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="data:," /> //This is for the icon in the browser (Currently no icon is added).
+    <!-- This is for the icon in the browser (Currently no icon is added). -->
+    <link rel="icon" href="data:," />
+
+    <!-- Ensures that the Website is Scaled properly even on Mobile Devices. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Task Manager</title> //The title in the browser tab.
+    <!-- The Title in the Browser. -->
+    <title>Task Manager</title>
   </head>
   <body>
+    <!-- React Mounts the Entire Application into this Root Div. -->
     <div id="root"></div>
+    <!-- Loads the Main React Entry File. -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

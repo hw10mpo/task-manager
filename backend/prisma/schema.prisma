@@ -1,12 +1,32 @@
+//Generator Tells Prisma which Client Library to Generate.
+//prisma-client.js Allows Node/Express backend to interact.
 generator client {
     provider = "prisma-client-js"
 }
 
+//Datasource defines the database connection.
+//Provider Postgresql is used for this project.
+//URL Loaded from the .env file (DATABASE_URL).
 datasource db {
     provider = "postgresql"
     url      = env("DATABASE_URL")
 }
 
+//Represents a User in the System.
+//id: primary key, auto-incrementing integer.
+//name: required string.
+//email: required string, must be unique.
+model User {
+  id    Int    @id @default(autoincrement())
+  name  String
+  email String @unique
+}
+
+//Represents a Task in the System.
+//id: primary key, auto-incrementing integer.
+//title: required string describing the task.
+//completed: boolean flag, defaults to false.
+//createdAt: timestamp automatically set when the task is created.
 model Task {
   id        Int      @id @default(autoincrement())
   title     String

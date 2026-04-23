@@ -1,29 +1,45 @@
+//Imports Reacts Hooks:
+//useEffect - Runs Side-Effects like Grabbing Data from the backend.
+//useState - Stores the Components' State.
 import { useState, useEffect } from "react";
+
+//Imports the Component Responsible for Creating New Tasks.
 import CreateTask from "./createTask";
 
 export default function App() {
+    //Stores all Tasks Grabbed from the Backend.
     const [tasks, setTasks] = useState([]);
+
+    //Tracks which Tasks are Currently Being Edited.
     const [editingId, setEditingId] = useState(null);
+
+    //Stores the Temporary Edited Title while the User is Still Typing.
     const [editingTitle, setEditingTitle] = useState("");
 
+    //Grabs all Tasks from the backend API.
     const refreshTasks = async () => {
         const res = await fetch("http://localhost:5000/api/tasks");
         const data = await res.json();
+        //Updates State. UI Re-Renders Automatically.
         setTasks(data);
     };
 
+    //Deletes Tasks.
     const deleteTask = async (id) => {
         await fetch(`http://localhost:5000/api/tasks/${id}`, {
             method: "DELETE",
         });
+        //Reloads Deleted Tasks.
         refreshTasks();
     };
 
+    //Begin Editing a Specific Task.
     const startEditing = (task) => {
         setEditingId(task.id);
         setEditingTitle(task.title);
     };
 
+    //Saves the Edited Tasks Titles.
     const saveEdit = async (id) => {
         const existing = tasks.find((t) => t.id === id);
 
@@ -31,26 +47,33 @@ export default function App() {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
+                //Updates Tasks Titles.
                 title: editingTitle,
+                //Preserve the Completion Status after Title Changes.
                 completed: existing.completed,
             }),
         });
 
+        //Resets Editing State.
         setEditingId(null);
         setEditingTitle("");
+        //Reloads Updated Tasks.
         refreshTasks();
     };
 
+    //Cancels the Edit of the Task Without Saving it.
     const cancelEdit = () => {
         setEditingId(null);
         setEditingTitle("");
     };
 
+    //Toggles a tasks completion status.
     const toggleStatus = async (task) => {
         await fetch(`http://localhost:5000/api/tasks/${task.id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
+                //Flips the Boolean. In short Toggles Incomplete to Complete.
                 completed: !task.completed,
             }),
         });
@@ -58,6 +81,7 @@ export default function App() {
         refreshTasks();
     };
 
+    //Load Tasks when the component mounts.
     useEffect(() => {
         refreshTasks();
     }, []);
@@ -114,7 +138,7 @@ export default function App() {
                                                 task.completed ? "text-green-600" : "text-red-600"
                                             }`}
                                         >
-                                            {task.completed ? "✔ Completed" : "❌ Not Completed"}
+                                            {task.completed ? "Completed" : "Incomplete"}
                                         </p>
                                     </div>
 
