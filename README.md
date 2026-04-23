@@ -61,14 +61,21 @@ Backend Setup:
 3. npm install -D typescript ts-node @types/express @types/node
 4. npm install prisma @types/pg --save-dev
 5. npm install @prisma/client @prisma/adapter-pg pg dotenv
-6. npx prisma
-7. npx prisma init --datasource-provider postgresql --output ../generated/prisma
+6. In the .env file replace your_user with database username and your_password with database password.
+7. To create database tables use npx prisma migrate dev --name init.
+8. Start backend server with npm run dev.
+9. Backend runs on https://localhost:5000
 
 Frontend Setup:
 1. npm install
 2. npm install express 
 3. npm install -D typescript ts-node @types/express @types/node
 4. npm install -D tailwindcss postcss autoprefixer
+5. Start frontend server with npm run dev.
+6. Frontend runs on https://localhost:5173
+
+The Frontend communicates with the Backend using:
+http://localhost:5000/api/tasks
 
 API Endpoints CRUD:
 1. GET /api/tasks
