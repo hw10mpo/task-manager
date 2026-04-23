@@ -32,7 +32,7 @@ export default function App() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 title: editingTitle,
-                completed: existing ? existing.completed : false,
+                completed: existing.completed,
             }),
         });
 
@@ -51,7 +51,6 @@ export default function App() {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                title: task.title,
                 completed: !task.completed,
             }),
         });
@@ -64,111 +63,96 @@ export default function App() {
     }, []);
 
     return (
-        <div>
-            <h1>Task Manager</h1>
+        <div className="min-h-screen bg-gray-100 flex justify-center p-6">
+            <div className="w-full max-w-xl bg-white shadow-lg rounded-lg p-6">
+                <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
+                    Task Manager
+                </h1>
 
-            <CreateTask onTaskCreated={refreshTasks} />
+                <CreateTask onTaskCreated={refreshTasks} />
 
-            <h2>Tasks</h2>
-            {tasks.length === 0 && <p>No tasks yet.</p>}
+                <h2 className="text-xl font-semibold mt-6 mb-3 text-gray-700">Tasks</h2>
 
-            <ul>
-                {tasks.map((task) => (
-                    <li key={task.id} style={{ marginBottom: "10px" }}>
-                        {editingId === task.id ? (
-                            <>
-                                <input
-                                    value={editingTitle}
-                                    onChange={(e) => setEditingTitle(e.target.value)}
-                                    style={{ padding: "4px" }}
-                                />
+                {tasks.length === 0 && (
+                    <p className="text-gray-500 text-center">No tasks yet.</p>
+                )}
 
-                                <button
-                                    onClick={() => saveEdit(task.id)}
-                                    style={{
-                                        marginLeft: "8px",
-                                        padding: "4px 10px",
-                                        backgroundColor: "#4CAF50",
-                                        border: "none",
-                                        borderRadius: "4px",
-                                        color: "white",
-                                        cursor: "pointer",
-                                    }}
-                                >
-                                    Save
-                                </button>
+                <ul className="space-y-3">
+                    {tasks.map((task) => (
+                        <li
+                            key={task.id}
+                            className="flex items-center justify-between bg-gray-50 p-4 rounded-lg border border-gray-200"
+                        >
+                            {editingId === task.id ? (
+                                <div className="flex w-full gap-2">
+                                    <input
+                                        value={editingTitle}
+                                        onChange={(e) => setEditingTitle(e.target.value)}
+                                        className="flex-1 border border-gray-300 rounded px-3 py-1"
+                                    />
 
-                                <button
-                                    onClick={cancelEdit}
-                                    style={{
-                                        marginLeft: "6px",
-                                        padding: "4px 10px",
-                                        backgroundColor: "#999",
-                                        border: "none",
-                                        borderRadius: "4px",
-                                        color: "white",
-                                        cursor: "pointer",
-                                    }}
-                                >
-                                    Cancel
-                                </button>
-                            </>
-                        ) : (
-                            <>
-                                {task.title}{" "}
-                                <strong>{task.completed ? "✔ Completed" : "❌ Not Completed"}</strong>
+                                    <button
+                                        onClick={() => saveEdit(task.id)}
+                                        className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700"
+                                    >
+                                        Save
+                                    </button>
 
-                                <button
-                                    onClick={() => toggleStatus(task)}
-                                    style={{
-                                        marginLeft: "10px",
-                                        padding: "4px 10px",
-                                        backgroundColor: "#6a5acd",
-                                        border: "none",
-                                        borderRadius: "4px",
-                                        color: "white",
-                                        cursor: "pointer",
-                                    }}
-                                >
-                                    Toggle Status
-                                </button>
+                                    <button
+                                        onClick={cancelEdit}
+                                        className="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            ) : (
+                                <>
+                                    <div>
+                                        <p className="font-medium text-gray-800">{task.title}</p>
+                                        <p
+                                            className={`text-sm ${
+                                                task.completed ? "text-green-600" : "text-red-600"
+                                            }`}
+                                        >
+                                            {task.completed ? "✔ Completed" : "❌ Not Completed"}
+                                        </p>
+                                    </div>
 
-                                <button
-                                    onClick={() => startEditing(task)}
-                                    style={{
-                                        marginLeft: "6px",
-                                        padding: "4px 10px",
-                                        backgroundColor: "#007bff",
-                                        border: "none",
-                                        borderRadius: "4px",
-                                        color: "white",
-                                        cursor: "pointer",
-                                    }}
-                                >
-                                    Edit
-                                </button>
+                                    <div className="flex gap-2">
+                                        <button
+                                            onClick={() => toggleStatus(task)}
+                                            className="px-3 py-1 bg-purple-600 text-white rounded hover:bg-purple-700"
+                                        >
+                                            Toggle
+                                        </button>
 
-                                <button
-                                    onClick={() => deleteTask(task.id)}
-                                    style={{
-                                        marginLeft: "6px",
-                                        padding: "4px 10px",
-                                        backgroundColor: "#ff4d4d",
-                                        border: "none",
-                                        borderRadius: "4px",
-                                        color: "white",
-                                        cursor: "pointer",
-                                    }}
-                                >
-                                    Delete
-                                </button>
-                            </>
-                        )}
-                    </li>
-                ))}
-            </ul>
+                                        <button
+                                            onClick={() => startEditing(task)}
+                                            className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+                                        >
+                                            Edit
+                                        </button>
 
-            <button onClick={refreshTasks}>Refresh</button>
+                                        <button
+                                            onClick={() => deleteTask(task.id)}
+                                            className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                </>
+                            )}
+                        </li>
+                    ))}
+                </ul>
+
+                <button
+                    onClick={refreshTasks}
+                    className="w-full mt-6 py-2 bg-gray-800 text-white rounded hover:bg-gray-900"
+                >
+                    Refresh
+                </button>
+            </div>
         </div>
     );
 }
